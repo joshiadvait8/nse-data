@@ -1,10 +1,26 @@
 from bs4 import BeautifulSoup
 import requests
 
+headers = {
+    'Host': 'www1.nseindia.com',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+    'sec-ch-ua-mobile': '?0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-User': '?1',
+    'Sec-Fetch-Dest': 'document',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9,es;q=0.8'
+}
 
 def getprice(symbol):
     url = 'https://www.nse-india.com/live_market/dynaContent/live_watch/option_chain/optionKeys.jsp?&symbol='+symbol+'&instrument=OPTSTK&date=-&segmentLink=17&segmentLink=17'
-    html = requests.get(url).text
+    html = requests.get(url, headers=headers).text
 
     soup = BeautifulSoup(html,'lxml')
     l=soup.select('div#container >div.content_big>div#wrapper_btm>table span b')
@@ -18,8 +34,8 @@ def getprice(symbol):
 def get_values_from_option_chain(symbol):
 
     # Base_url = "https://www.nseindia.com/live_market/dynaContent/live_watch/option_chain/optionKeys.jsp?symbol=" + symbol + "&date=" + expdate
-    Base_url = 'https://www.nse-india.com/live_market/dynaContent/live_watch/option_chain/optionKeys.jsp?&symbol='+symbol+'&instrument=OPTSTK&date=-&segmentLink=17&segmentLink=17'
-    page = requests.get(Base_url)
+    Base_url = f'https://www.nse-india.com/live_market/dynaContent/live_watch/option_chain/optionKeys.jsp?&symbol={symbol}&instrument=OPTSTK&date=-&segmentLink=17&segmentLink=17'
+    page = requests.get(Base_url, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     table_cls_2 = soup.find(id="octable")
